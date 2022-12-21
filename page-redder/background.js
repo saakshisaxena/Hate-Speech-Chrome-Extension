@@ -4,7 +4,7 @@ function reddenPage() {
   content = document.body.innerHTML;
   content = content.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
   content = content.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
-  content = content.replace( /(<([^>]+)>)/ig, '');
+  content = content.replace( /(<([^>]+)>)/ig, ' ');
   str = content;
   str = str.replace(/\s\s+/g, '. ');
   console.log(str);
