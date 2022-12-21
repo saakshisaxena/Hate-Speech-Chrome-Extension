@@ -3,6 +3,9 @@ function reddenPage() {
   console.log("Turns the page red");
   // console.log("doc.body = "+document.body.innerHTML);
   content = document.body.innerHTML;
+  content = content.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+  content = content.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+  // console.log(content);
   content = content.replace( /(<([^>]+)>)/ig, '');
   // console.log(content);
   str = content;
