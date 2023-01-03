@@ -16,14 +16,22 @@ function reddenPage() {
   x.appendChild(t);
   // document.body.appendChild(x);
 
+    // create the proceed button
+    var y = document.createElement("BUTTON");
+    var s = document.createTextNode("Proceed");
+    y.setAttribute("id","proceed-button");
+    y.appendChild(s);
+
   // add the blur screen
   const elem = document.createElement('div');
   elem.style.cssText = 'position: fixed; padding:0; top:0; left:0; width: 100%; height: 100%; background:rgba(24,24,24,0.95);';
   elem.appendChild(x);
+  elem.appendChild(y);
   elem.setAttribute("id","blur-screen");
   document.body.appendChild(elem);
 
   document.getElementById("go-back-button").onclick = function() {window.history.back(); elem.remove();};
+  document.getElementById("proceed-button").onclick = function() {elem.remove();};
 }
 
 
