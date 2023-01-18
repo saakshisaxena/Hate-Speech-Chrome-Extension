@@ -1,6 +1,4 @@
 function reddenPage() {
-  // document.body.style.backgroundColor = 'red';
-  // console.log("Turns the page red");
   content = document.body.innerHTML;
   content = content.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
   content = content.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '');
