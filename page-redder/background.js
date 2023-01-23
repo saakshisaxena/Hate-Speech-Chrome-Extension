@@ -181,6 +181,8 @@ function reddenPage() {
 
     // Add the "Proceed" functionality to the "Proceed" button
     proceedBtn.onclick = function() {
+      console.log("before create new tab")
+      chrome.tabs.create({ url: 'feedback.html' });
       overlay.remove();
     };
   
@@ -233,7 +235,7 @@ function reddenPage() {
 
     // Append the div to the overlay
     overlay.appendChild(headingContainer);
-
+    
     
     // // Create the button element
     let button = document.createElement("button");
@@ -261,29 +263,157 @@ function reddenPage() {
         color: white;
         font-size: 1.2em;
         text-align: center;
+        display: flex;
+        flex-wrap: wrap;
     `;
 
     // Add an event listener to the "See More" button that will update the textResult div when clicked
     seeMoreBtn.addEventListener("click", function() {
-        let originalText = "Hate speech detected: <br> <b>";
         for (let i = 0; i < data.results.length; i++) {
-            if (data.results[i].hate) {
-                originalText += data.results[i].original + "<br>";
-            }
-        }
-        textResult.innerHTML = originalText;
+          if (data.results[i].hate) {
+              // Create a new span element to display the text of the line
+              let lineText = document.createElement("span");
+              lineText.innerHTML = data.results[i].original + "\t";
+      
+              // Create a new button element
+              let reportBtn = document.createElement("button");
+              reportBtn.innerHTML = "Report";
+              reportBtn.style.cssText = `
+                  background-color: red;
+                  color: white;
+                  padding: 4px 8px;
+                  border: none;
+                  cursor: pointer;
+              `;
+              lineText.style.cssText = `
+                  flex-basis: 70%;
+                  margin-bottom: 20px;
+              `;
+
+              reportBtn.style.cssText = `
+                flex-basis: 30%;
+                background-color: red;
+                color: white;
+                width: 50px;
+                height: 25px;
+                border: none;
+                cursor: pointer;
+                line-height: 1.5;
+            `;
+
+              // Append the button and the span element to the textResult div
+              textResult.appendChild(lineText);
+              textResult.appendChild(reportBtn);
+              textResult.appendChild(document.createElement("br"));
+              textResult.appendChild(document.createElement("br"));
+      
+              reportBtn.addEventListener("click", function() {
+                // Send the tuple of the string and "false" to the API endpoint
+                fetch("https://your-api-endpoint.com/api/report", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        originalText: data.results[i].original,
+                        hate: false
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            });
+          }
+      }
     });
+  
 
     // Append the textResult div to the overlay
     overlay.appendChild(textResult);
 
 
+
+    // Create the "Feedback" button
+    let feedbackBtn = document.createElement("button");
+    feedbackBtn.innerHTML = "Feedback";
+    feedbackBtn.style.cssText = `
+        position: absolute;
+        top: 50%;
+        right: -50px;
+        transform: rotate(270deg);
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        // make the button rounder at one length ans straigth on the other
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+        writing-mode: vertical-rl;
+        width: 100px;
+        height: 50px;
+        transform-origin: center;
+        padding: 10px 20px;
+    `;
+
+    overlay.appendChild(feedbackBtn);
     
+    // let feedbackUrl = chrome.runtime.getURL("feedback.html");
+
+    feedbackBtn.onclick = function() {
+      console.log("feedback button");
+      window.open("feedback.html", "_blank");
+    }
+    // // Add an event listener to the feedback button
+    // feedbackBtn.addEventListener("click", function() {
+    //   console.log("feedback button");
+    //   // Open the feedback page in a new tab
+    //   chrome.tabs.create({url: feedbackUrl});
+    // });
+
+    // // // Adding the original text lines to the feedback.html page
+    // // let tbody = document.getElementById("feedback-data");
+
+    // // for (let i = 0; i < data.results.length; i++) {
+    // //     let tr = document.createElement("tr");
+    // //     let td = document.createElement("td");
+    // //     td.innerHTML = data.results[i].original;
+    // //     tr.appendChild(td);
+    // //     console.log(tbody);
+    // //     tbody.appendChild(tr);
+    // // }
+    // let feedbackUrl = chrome.runtime.getURL("feedback.html");
+    // feedbackBtn.addEventListener("click", function() {
+    //   console.log("feedback button");
+    //   // To be deleted
+    //   overlay.remove();
+    //   console.log("after overlay.removal");
+    //   ///////////////
+    //   chrome.tabs.create({url:feedbackUrl}, function(tab){console.log("tab created", tab)}); 
+    // });
+    // let tbody = document.getElementById("feedback-data");
+    // for (let i = 0; i < data.results.length; i++) {
+    //     let tr = document.createElement("tr");
+    //     let td = document.createElement("td");
+    //     td.innerHTML = data.results[i].original;
+    //     tr.appendChild(td);
+    //     tbody.appendChild(tr);
+    // }
+    
+  
+
   }
   else {
     console.log("No hate speech detected!")
   }
 }
+
 
 chrome.action.onClicked.addListener((tab) => {
   if(!tab.url.includes("chrome://")) {
@@ -292,4 +422,15 @@ chrome.action.onClicked.addListener((tab) => {
       function: reddenPage
     });
   }
+  
 });
+
+// chrome.action.onClicked.addListener(function(tab) {
+//   // let feedbackUrl = chrome.runtime.getURL("feedback.html");
+//   console.log("feedback button");
+//       // To be deleted
+//       overlay.remove();
+//       console.log("after overlay.removal");
+//       ///////////////
+//       // chrome.tabs.create({url:feedbackUrl}, function(tab){console.log("tab created", tab)}); 
+// });

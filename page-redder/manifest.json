@@ -6,7 +6,10 @@
   "description": "Turns the page red when you click the icon",
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "webNavigation", 
+    "tabs", 
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "background.js"
