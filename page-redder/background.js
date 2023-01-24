@@ -181,8 +181,6 @@ function reddenPage() {
 
     // Add the "Proceed" functionality to the "Proceed" button
     proceedBtn.onclick = function() {
-      console.log("before create new tab")
-      chrome.tabs.create({ url: 'feedback.html' });
       overlay.remove();
     };
   
@@ -361,52 +359,77 @@ function reddenPage() {
         transform-origin: center;
         padding: 10px 20px;
     `;
-
     overlay.appendChild(feedbackBtn);
-    
-    // let feedbackUrl = chrome.runtime.getURL("feedback.html");
+    // Add an event listener to the feedback button
+    feedbackBtn.addEventListener("click", function() {
+      // Create the new HTML element for the pop-up
+      let feedbackPopup = document.createElement("div");
 
-    feedbackBtn.onclick = function() {
-      console.log("feedback button");
-      window.open("feedback.html", "_blank");
-    }
-    // // Add an event listener to the feedback button
-    // feedbackBtn.addEventListener("click", function() {
-    //   console.log("feedback button");
-    //   // Open the feedback page in a new tab
-    //   chrome.tabs.create({url: feedbackUrl});
-    // });
+      // Set the CSS for the element to position it as a pop-up
+      feedbackPopup.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: white;
+          padding: 20px;
+          z-index: 9999;
+      `;
 
-    // // // Adding the original text lines to the feedback.html page
-    // // let tbody = document.getElementById("feedback-data");
+      // Add the content for the pop-up
+      feedbackPopup.innerHTML = `
+          <h1>Feedback</h1>
+          <textarea id="feedback-textarea"></textarea>
+          <button id="submit-feedback-btn">Submit</button>
+      `;
+      // Add the element to the body of the current webpage
+      document.body.appendChild(feedbackPopup);
 
-    // // for (let i = 0; i < data.results.length; i++) {
-    // //     let tr = document.createElement("tr");
-    // //     let td = document.createElement("td");
-    // //     td.innerHTML = data.results[i].original;
-    // //     tr.appendChild(td);
-    // //     console.log(tbody);
-    // //     tbody.appendChild(tr);
-    // // }
-    // let feedbackUrl = chrome.runtime.getURL("feedback.html");
-    // feedbackBtn.addEventListener("click", function() {
-    //   console.log("feedback button");
-    //   // To be deleted
-    //   overlay.remove();
-    //   console.log("after overlay.removal");
-    //   ///////////////
-    //   chrome.tabs.create({url:feedbackUrl}, function(tab){console.log("tab created", tab)}); 
-    // });
-    // let tbody = document.getElementById("feedback-data");
-    // for (let i = 0; i < data.results.length; i++) {
-    //     let tr = document.createElement("tr");
-    //     let td = document.createElement("td");
-    //     td.innerHTML = data.results[i].original;
-    //     tr.appendChild(td);
-    //     tbody.appendChild(tr);
-    // }
-    
-  
+
+      // Add the data from hate speech model to the pop up
+      let originalSentences = "";
+      for (let i = 0; i < data.results.length; i++) {
+          let toggleBtn = document.createElement("button");
+          if(data.results[i].hate) {
+              toggleBtn.innerHTML = "Hate";
+          }else{
+              toggleBtn.innerHTML = "Not Hate";
+          }
+          toggleBtn.classList.add("toggle-btn");
+          toggleBtn.dataset.hate = data.results[i].hate;
+          toggleBtn.addEventListener("click", function(){
+              this.dataset.hate = !JSON.parse(this.dataset.hate);
+              this.innerHTML = this.dataset.hate ? "Hate" : "Not Hate";
+          });
+          let sentence = document.createElement("p");
+          sentence.innerHTML = `${i+1}. ${data.results[i].original}`;
+          sentence.classList.add("sentence");
+          feedbackPopup.appendChild(sentence);
+          feedbackPopup.appendChild(toggleBtn);
+      }
+      // Add the originalSentences to the feedback popup
+      feedbackPopup.innerHTML += originalSentences;
+
+
+
+      // Create a close button
+      let closeBtn = document.createElement("button");
+      closeBtn.innerHTML = "Close";
+      closeBtn.style.cssText = `
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          padding: 10px 20px;
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          cursor: pointer;
+      `;
+      feedbackPopup.appendChild(closeBtn);
+      closeBtn.addEventListener("click", function() {
+          document.body.removeChild(feedbackPopup);
+      });
+    });
 
   }
   else {
