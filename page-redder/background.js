@@ -11,6 +11,14 @@ function reddenPage() {
               "hate": true
           },
           {
+            "original": "i hate people ahhhh",
+            "processed": [
+                "hate",
+                "people"
+            ],
+            "hate": true
+          },
+          {
               "original": "we've updated our privacy and cookies policy",
               "processed": [
                   "update",
@@ -379,16 +387,26 @@ function reddenPage() {
       // Add the content for the pop-up
       feedbackPopup.innerHTML = `
           <h1>Feedback</h1>
-          <textarea id="feedback-textarea"></textarea>
           <button id="submit-feedback-btn">Submit</button>
       `;
       // Add the element to the body of the current webpage
       document.body.appendChild(feedbackPopup);
-
+    
+      // Create a container element for the original sentences and toggle buttons
+      let feedbackList = document.createElement("div");
+      feedbackList.classList.add("feedback-list");
+      feedbackPopup.appendChild(feedbackList);
+      feedbackList.style.height = "300px";
+      feedbackList.style.overflowY = "scroll";
 
       // Add the data from hate speech model to the pop up
       let originalSentences = "";
       for (let i = 0; i < data.results.length; i++) {
+          let sentence = document.createElement("p");
+          sentence.innerHTML = `${i+1}. ${data.results[i].original}`;
+          sentence.classList.add("sentence");
+          feedbackList.appendChild(sentence);
+          
           let toggleBtn = document.createElement("button");
           if(data.results[i].hate) {
               toggleBtn.innerHTML = "Hate";
@@ -398,15 +416,28 @@ function reddenPage() {
           toggleBtn.classList.add("toggle-btn");
           toggleBtn.dataset.hate = data.results[i].hate;
           toggleBtn.addEventListener("click", function(){
-              this.dataset.hate = !JSON.parse(this.dataset.hate);
-              this.innerHTML = this.dataset.hate ? "Hate" : "Not Hate";
+            this.dataset.hate = !JSON.parse(this.dataset.hate);
+            this.innerHTML = this.dataset.hate ? "Hate" : "Not Hate";
+            // Add functionality to submit the tuple on the click of the toggle button
+            let statement = this.previousSibling.innerHTML;
+            let hateValue = this.dataset.hate;
+            let data = {statement: statement, hate: hateValue};
+            console.log(data);
+            fetch("https://api-endpoint.com/feedback", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                // do something with the response
+            }).catch(error => {
+                console.error("Error:", error);
+            });
           });
-          let sentence = document.createElement("p");
-          sentence.innerHTML = `${i+1}. ${data.results[i].original}`;
-          sentence.classList.add("sentence");
-          feedbackPopup.appendChild(sentence);
-          feedbackPopup.appendChild(toggleBtn);
+          feedbackList.appendChild(toggleBtn);
       }
+
       // Add the originalSentences to the feedback popup
       feedbackPopup.innerHTML += originalSentences;
 
