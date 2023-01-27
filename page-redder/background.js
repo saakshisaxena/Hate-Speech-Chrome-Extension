@@ -402,41 +402,40 @@ function reddenPage() {
       // Add the data from hate speech model to the pop up
       let originalSentences = "";
       for (let i = 0; i < data.results.length; i++) {
-          let sentence = document.createElement("p");
-          sentence.innerHTML = `${i+1}. ${data.results[i].original}`;
-          sentence.classList.add("sentence");
-          feedbackList.appendChild(sentence);
-          
-          let toggleBtn = document.createElement("button");
-          if(data.results[i].hate) {
-              toggleBtn.innerHTML = "Hate";
-          }else{
-              toggleBtn.innerHTML = "Not Hate";
-          }
-          toggleBtn.classList.add("toggle-btn");
-          toggleBtn.dataset.hate = data.results[i].hate;
-          toggleBtn.addEventListener("click", function(){
-            this.dataset.hate = !JSON.parse(this.dataset.hate);
-            this.innerHTML = this.dataset.hate ? "Hate" : "Not Hate";
-            // Add functionality to submit the tuple on the click of the toggle button
-            let statement = this.previousSibling.innerHTML;
-            let hateValue = this.dataset.hate;
-            let data = {statement: statement, hate: hateValue};
-            console.log(data);
-            fetch("https://api-endpoint.com/feedback", {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(response => {
-                // do something with the response
-            }).catch(error => {
-                console.error("Error:", error);
-            });
-          });
-          feedbackList.appendChild(toggleBtn);
-      }
+        let sentence = document.createElement("p");
+        sentence.innerHTML = `${i+1}. ${data.results[i].original}`;
+        sentence.classList.add("sentence");
+        feedbackList.appendChild(sentence);
+        
+        let toggleBtn = document.createElement("button");
+        toggleBtn.classList.add("toggle-btn");
+        toggleBtn.id = `toggle-btn-${i}`;
+        if(data.results[i].hate) {
+            toggleBtn.innerHTML = "Hate";
+        }else{
+            toggleBtn.innerHTML = "Not Hate";
+        }
+        toggleBtn.dataset.hate = data.results[i].hate;
+        console.log("Working till  here?");
+    console.log(toggleBtn);
+
+        feedbackList.appendChild(toggleBtn);
+    }
+const toggleButtons = document.querySelectorAll(".toggle-btn");
+toggleButtons.forEach((btn) => {
+  btn.addEventListener("click", function() {
+      console.log("clicked!");
+      this.dataset.hate = this.dataset.hate === "true" ? "false" : "true";
+      this.innerHTML = this.dataset.hate ? "Hate" : "Not Hate";
+      // Add functionality to submit the tuple on the click of the toggle button
+      let statement = this.previousSibling.innerHTML;
+      let hateValue = this.dataset.hate;
+      let feedbackData = {statement: statement, hate: hateValue};
+      console.log("Button clicked!")
+      console.log(feedbackData);
+  });
+});
+
 
       // Add the originalSentences to the feedback popup
       feedbackPopup.innerHTML += originalSentences;
