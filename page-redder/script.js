@@ -268,133 +268,131 @@ function createFeedback(data,overlay){
     overlay.appendChild(feedbackBtn);
     // Add an event listener to the feedback button
     feedbackBtn.addEventListener("click", function () {
-      showPopup(data, overlay);
-  });
+        // To check if the pop is open then don't open it again!
+        if (document.getElementById("popup")!=null) {
+          console.log("Popup is open");
+          return;
+        }
+        // Create the new HTML element for the pop-up
+        let feedbackPopup = document.createElement("div");
+    
+        // Set the CSS for the element to position it as a pop-up
+        feedbackPopup.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            z-index: 9999;
+        `;
+    
+        // Add the content for the pop-up
+        feedbackPopup.innerHTML = `
+            <h1>Feedback</h1>
+            <button id="submit-feedback-btn">Submit</button>
+        `;
+        feedbackPopup.setAttribute("id","popup");
+        // Add the element to the body of the current webpage
+        document.body.appendChild(feedbackPopup);
+    
+        // Create a container element for the original sentences and toggle buttons
+        let feedbackList = document.createElement("div");
+        feedbackList.classList.add("feedback-list");
+        feedbackPopup.appendChild(feedbackList);
+        feedbackList.style.height = "300px";
+        feedbackList.style.overflowY = "scroll";
+    
+        // To keep a track of changes of the toggle button
+        let feedbackDataArray = [];
+        // Add the data from hate speech model to the pop up
+        for (let i = 0; i < data.results.length; i++) {
+            let sentence = document.createElement("p");
+            sentence.innerHTML = `${i + 1}. ${data.results[i].original}`;
+            sentence.classList.add("sentence");
+            feedbackList.appendChild(sentence);
+    
+            let toggleBtn = document.createElement("button");
+            
+            if (data.results[i].hate) {
+                toggleBtn.innerHTML = "Hate";
+            } 
+            else {
+                toggleBtn.innerHTML = "Not Hate";
+            }
+
+            toggleBtn.classList.add("toggle-btn");
+            toggleBtn.id = `toggle-btn-${i + 1}`;
+            toggleBtn.dataset.hate = data.results[i].hate;
+            
+            toggleBtn.onclick = function () {
+                this.dataset.hate = !JSON.parse(this.dataset.hate);
+                console.log("Original hate data:", this.dataset.hate);
+                document.getElementById(`toggle-btn-${i + 1}`).innerHTML = this.dataset.hate == "true" ? "Hate" : "Not Hate";
+                // Add functionality to submit the tuple on the click of the toggle button
+                // Check if the "hate" value of the sentence has been changed
+                let statement = this.previousSibling.innerHTML;
+                let hateValue = this.dataset.hate;
+                let feedbackData = { statement: statement, hate: hateValue };
+                
+                let existingDataIndex = feedbackDataArray.findIndex(
+                    (data) => data.statement === statement
+                );
+                if (existingDataIndex !== -1) {
+                    feedbackDataArray[existingDataIndex] = feedbackData;
+                } 
+                else {
+                    console.log(feedbackData);
+                    feedbackDataArray.push(feedbackData);
+                }
+            };
+    
+            feedbackList.appendChild(toggleBtn);
+        }
+    
+        // Add submit button listener
+        let submitBtn = document.getElementById("submit-feedback-btn");
+            submitBtn.addEventListener("click", function () {
+            //report each change to server
+            var api= new Api()
+            for (let x = 0; x < feedbackDataArray.length; x++){
+                api.report(feedbackDataArray[x].statement,feedbackDataArray[x].hate)
+            }
+            
+        });
+
+        // Add styling to the submit button 
+        submitBtn.style.backgroundColor = "blue";
+        submitBtn.style.color = "white";
+        submitBtn.style.padding = "10px 20px";
+        submitBtn.style.borderRadius = "5px";
+        submitBtn.style.margin = "5%";
+        submitBtn.style.width = "100px";
+        submitBtn.style.position = "absolute";
+        submitBtn.style.right = "35%";
+        submitBtn.style.top = "0";
+        
+    
+        // Create a close button
+        let closeBtn = document.createElement("button");
+        closeBtn.innerHTML = "Close";
+        closeBtn.style.cssText = `
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        `;
+        feedbackPopup.appendChild(closeBtn);
+        closeBtn.addEventListener("click", function () {
+            document.body.removeChild(feedbackPopup);
+        });
+    });
 }
 
-function showPopup(data, overlay) {
-  let feedbackPopup = document.createElement("div");
-  
-  // Set the CSS for the element to position it as a pop-up
-  feedbackPopup.style.cssText = `
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: white;
-      padding: 20px;
-      z-index: 9999;
-  `;
-
-  // Add the content for the pop-up
-  feedbackPopup.innerHTML = `
-      <h1>Feedback</h1>
-      <button id="close-feedback-btn">Close</button>
-  `;
-
-  // Add the element to the body of the current webpage
-  document.body.appendChild(feedbackPopup);
-
-  
-  // Create a container element for the original sentences and toggle buttons
-  let feedbackList = document.createElement("div");
-  feedbackList.classList.add("feedback-list");
-  feedbackPopup.appendChild(feedbackList);
-  feedbackList.style.height = "300px";
-  feedbackList.style.overflowY = "scroll";
-
-  // To keep a track of changes of the toggle button
-  let feedbackDataArray = [];
-  // Add the data from hate speech model to the pop up
-  for (let i = 0; i < data.results.length; i++) {
-      let sentence = document.createElement("p");
-      sentence.innerHTML = `${i + 1}. ${data.results[i].original}`;
-      sentence.classList.add("sentence");
-      feedbackList.appendChild(sentence);
-
-      let toggleBtn = document.createElement("button");
-      
-      if (data.results[i].hate) {
-          toggleBtn.innerHTML = "Hate";
-      } 
-      else {
-          toggleBtn.innerHTML = "Not Hate";
-      }
-
-      toggleBtn.classList.add("toggle-btn");
-      toggleBtn.id = `toggle-btn-${i + 1}`;
-      toggleBtn.dataset.hate = data.results[i].hate;
-      
-      toggleBtn.onclick = function () {
-          this.dataset.hate = !JSON.parse(this.dataset.hate);
-          console.log("Original hate data:", this.dataset.hate);
-          document.getElementById(`toggle-btn-${i + 1}`).innerHTML = this.dataset.hate == "true" ? "Hate" : "Not Hate";
-          // Add functionality to submit the tuple on the click of the toggle button
-          // Check if the "hate" value of the sentence has been changed
-          let statement = this.previousSibling.innerHTML;
-          let hateValue = this.dataset.hate;
-          let feedbackData = { statement: statement, hate: hateValue };
-          
-          let existingDataIndex = feedbackDataArray.findIndex(
-              (data) => data.statement === statement
-          );
-          if (existingDataIndex !== -1) {
-              feedbackDataArray[existingDataIndex] = feedbackData;
-          } 
-          else {
-              console.log(feedbackData);
-              feedbackDataArray.push(feedbackData);
-          }
-      };
-
-      feedbackList.appendChild(toggleBtn);
-  }
-
-  // Add submit button listener
-  let submitBtn = document.getElementById("submit-feedback-btn");
-      submitBtn.addEventListener("click", function () {
-      //report each change to server
-      var api= new Api()
-      for (let x = 0; x < feedbackDataArray.length; x++){
-          api.report(feedbackDataArray[x].statement,feedbackDataArray[x].hate)
-      }
-      
-  });
-
-  // Add styling to the submit button 
-  submitBtn.style.backgroundColor = "blue";
-  submitBtn.style.color = "white";
-  submitBtn.style.padding = "10px 20px";
-  submitBtn.style.borderRadius = "5px";
-  submitBtn.style.margin = "5%";
-  submitBtn.style.width = "100px";
-  submitBtn.style.position = "absolute";
-  submitBtn.style.right = "35%";
-  submitBtn.style.top = "0";
-  
-
-  // Create a close button
-  let closeBtn = document.createElement("button");
-  closeBtn.innerHTML = "Close";
-  closeBtn.style.cssText = `
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-  `;
-  feedbackPopup.appendChild(closeBtn);
-  // Add a close button listener
-  closeBtn.addEventListener("click", closePopup);
-}
-
-function closePopup() {
-  let feedbackPopup = document.querySelector(".feedback-list");
-  feedbackPopup.remove();
-}
 
 
 if (data.hate) {
