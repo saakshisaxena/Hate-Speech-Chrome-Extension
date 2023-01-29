@@ -1,4 +1,3 @@
-
   chrome.webNavigation.onDOMContentLoaded.addListener((details) => {
     
         chrome.scripting.executeScript({
@@ -20,14 +19,3 @@
     }
     
   }); 
-  
-  
-  // chrome.action.onClicked.addListener(function(tab) {
-  //   // let feedbackUrl = chrome.runtime.getURL("feedback.html");
-  //   console.log("feedback button");
-  //       // To be deleted
-  //       overlay.remove();
-  //       console.log("after overlay.removal");
-  //       ///////////////
-  //       // chrome.tabs.create({url:feedbackUrl}, function(tab){console.log("tab created", tab)}); 
-  // });
