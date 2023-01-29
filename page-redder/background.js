@@ -399,22 +399,9 @@ function reddenPage() {
         feedbackList.style.height = "300px";
         feedbackList.style.overflowY = "scroll";
   
+        // To keep a track of changes of the toggle button
+        let feedbackDataArray = [];
         // Add the data from hate speech model to the pop up
-        /* let originalSentences = "";
-
-        let sentence = document.createElement("p");
-        sentence.innerHTML = `${1}. ${data.results[0].original}`;
-        sentence.classList.add("sentence");
-        feedbackList.appendChild(sentence);
-        
-        let toggleBtn = document.createElement("button");
-        toggleBtn.innerText = "hello"
-        //toggleBtn.onclick = function(){console.log("hello")}
-        toggleBtn.addEventListener("click", function() {
-            console.log("hello")
-        });
-        feedbackList.appendChild(toggleBtn); */
-
         for (let i = 0; i < data.results.length; i++) {
             let sentence = document.createElement("p");
             sentence.innerHTML = `${i+1}. ${data.results[i].original}`;
@@ -432,34 +419,42 @@ function reddenPage() {
             toggleBtn.dataset.hate = data.results[i].hate;
             toggleBtn.onclick=function(){
               this.dataset.hate = !(JSON.parse(this.dataset.hate));
-              
+              console.log("Original hate data:", this.dataset.hate);
               document.getElementById(`toggle-btn-${i+1}`).innerHTML = this.dataset.hate == "true" ? "Hate" : "Not Hate";
               // Add functionality to submit the tuple on the click of the toggle button
+              // Check if the "hate" value of the sentence has been changed
               let statement = this.previousSibling.innerHTML;
               let hateValue = this.dataset.hate;
               let feedbackData = {statement: statement, hate: hateValue};
-              console.log(feedbackData);
-              fetch("https://api-endpoint.com/feedback", {
-                  method: "POST",
-                  body: JSON.stringify(feedbackData),
-                  headers: {
-                      "Content-Type": "application/json"
-                  }
-              }).then(response => {
-                  // do something with the response
-              }).catch(error => {
-                  console.error("Error:", error);
-              });
+              let existingDataIndex = feedbackDataArray.findIndex(data => data.statement === statement);
+              if(existingDataIndex !== -1) {
+                  feedbackDataArray[existingDataIndex] = feedbackData;
+              } else {
+                  console.log(feedbackData);
+                  feedbackDataArray.push(feedbackData);
+             }
             };
+
             feedbackList.appendChild(toggleBtn); 
-            
+
+            // Add submit button listener
+            let submitBtn = document.getElementById("submit-feedback-btn");
+            submitBtn.addEventListener("click", function(){
+                console.log(feedbackDataArray);
+                fetch("https://api-endpoint.com/feedback", {
+                    method: "POST",
+                    body: JSON.stringify(feedbackDataArray),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }).then(response => {
+                    // do something with the response
+                }).catch(error => {
+                    console.error("Error:", error);
+                });
+            });
         }
-  
-        // Add the originalSentences to the feedback popup
-        
-  
-  
-  
+
         // Create a close button
         let closeBtn = document.createElement("button");
         closeBtn.innerHTML = "Close";
