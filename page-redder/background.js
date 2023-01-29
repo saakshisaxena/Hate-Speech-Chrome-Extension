@@ -446,7 +446,7 @@ function reddenPage() {
                     body: JSON.stringify(feedbackDataArray),
                     headers: {
                         "Content-Type": "application/json"
-                    }
+                    } 
                 }).then(response => {
                     // do something with the response
                 }).catch(error => {
