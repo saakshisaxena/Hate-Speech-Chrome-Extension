@@ -1,9 +1,8 @@
 {
-  "name": "Page Redder",
-  "action": {},
+  "name": "Hate Speech Detector",
   "manifest_version": 3,
   "version": "0.1",
-  "description": "Turns the page red when you click the icon",
+  "description": "Shows a blur screen covering the content on the screen if hate speech is detected.",
   "permissions": [
     "activeTab",
     "scripting",
@@ -11,6 +10,18 @@
     "tabs", 
     "<all_urls>"
   ],
+  "action": {
+    "default_icon": {
+      "16": "whiteyeexample.png",
+      "32": "whiteyeexample.png"
+      }
+  },
+  "icons": {
+    "16": "whiteyeexample.png",
+    "32": "whiteyeexample.png",
+    "48": "whiteyeexample.png",
+    "128": "whiteyeexample.png"
+  },
   "background": {
     "service_worker": "background.js"
   }

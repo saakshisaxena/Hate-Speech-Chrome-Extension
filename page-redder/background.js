@@ -213,7 +213,7 @@ function reddenPage() {
       `;
   
       // Get the URL of the image file
-      let imgUrl = chrome.runtime.getURL("page-redder\whiteyeexample.png");
+      let imgUrl = chrome.runtime.getURL("chrome-extension://bnojgmepnhlbjjkklgbchcapmlchfckh/whiteyeexample.png");
   
       // Set the image source
       img.src = imgUrl;
@@ -392,6 +392,18 @@ function reddenPage() {
         // Add the element to the body of the current webpage
         document.body.appendChild(feedbackPopup);
       
+        // Add styling to the submit button 
+        let submitBtn = document.getElementById("submit-feedback-btn");
+        submitBtn.style.backgroundColor = "blue";
+        submitBtn.style.color = "white";
+        submitBtn.style.padding = "10px 20px";
+        submitBtn.style.borderRadius = "5px";
+        submitBtn.style.margin = "5%";
+        submitBtn.style.width = "100px";
+        submitBtn.style.position = "absolute";
+        submitBtn.style.right = "35%";
+        submitBtn.style.top = "0";
+
         // Create a container element for the original sentences and toggle buttons
         let feedbackList = document.createElement("div");
         feedbackList.classList.add("feedback-list");
@@ -472,6 +484,7 @@ function reddenPage() {
         closeBtn.addEventListener("click", function() {
             document.body.removeChild(feedbackPopup);
         });
+        
       });
       
     }
