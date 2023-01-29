@@ -173,20 +173,25 @@ function createHeading(){
 
 function createTextResult(data,seeMoreBtn){
     let textResult = document.createElement("div");
-    textResult.style.cssText = `
-            position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translate(-50%, 0);
-            color: white;
-            font-size: 1.2em;
-            text-align: center;
-            display: flex;
-            flex-wrap: wrap;
-        `;
-
+      textResult.style.cssText = `
+              position: absolute;
+              top: 20%;
+              left: 50%;
+              transform: translate(-50%, 0);
+              color: white;
+              font-size: 1.2em;
+              text-align: center;
+              display: flex;
+              flex-wrap: wrap;
+          `;
     // Add an event listener to the "See More" button that will update the textResult div when clicked
     seeMoreBtn.addEventListener("click", function () {
+        // To check if the text is already there
+        if (document.getElementById("see-more-text")!=null) {
+          console.log("See more button already clicked!");
+          return;
+        }
+        textResult.setAttribute("id","see-more-text");
         for (let i = 0; i < data.results.length; i++) {
         if (data.results[i].hate) {
             // Create a new span element to display the text of the line
