@@ -143,7 +143,7 @@ function createHeading(){
       `;
   
     // Get the URL of the image file
-    let imgUrl = chrome.runtime.getURL("chrome-extension://bnojgmepnhlbjjkklgbchcapmlchfckh/whiteyeexample.png");
+    let imgUrl = chrome.runtime.getURL("whiteyeexample.png");
   
     // Set the image source
     img.src = imgUrl;
