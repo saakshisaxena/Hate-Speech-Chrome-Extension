@@ -143,7 +143,7 @@ function createHeading(){
       `;
   
     // Get the URL of the image file
-    let imgUrl = chrome.runtime.getURL("page-redderwhiteyeexample.png");
+    let imgUrl = chrome.runtime.getURL("chrome-extension://bnojgmepnhlbjjkklgbchcapmlchfckh/whiteyeexample.png");
   
     // Set the image source
     img.src = imgUrl;
@@ -354,6 +354,17 @@ function createFeedback(data,overlay){
             }
             
         });
+
+        // Add styling to the submit button 
+        submitBtn.style.backgroundColor = "blue";
+        submitBtn.style.color = "white";
+        submitBtn.style.padding = "10px 20px";
+        submitBtn.style.borderRadius = "5px";
+        submitBtn.style.margin = "5%";
+        submitBtn.style.width = "100px";
+        submitBtn.style.position = "absolute";
+        submitBtn.style.right = "35%";
+        submitBtn.style.top = "0";
         
     
         // Create a close button
