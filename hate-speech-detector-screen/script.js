@@ -413,7 +413,7 @@ if (data.hate) {
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(24,24,24,0.95);
+        background-color: black;
         z-index: 9999;
     `;
 
