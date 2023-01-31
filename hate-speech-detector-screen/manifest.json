@@ -34,6 +34,12 @@
       "resources": [ "whiteyeexample.png" ],
       "matches": [ "https://*/*" ]
     }
+  ],
+  "content_scripts":[
+    {
+      "matches": ["*://*/*"],
+      "css": ["style.css"]
+    }
   ]
 
 }

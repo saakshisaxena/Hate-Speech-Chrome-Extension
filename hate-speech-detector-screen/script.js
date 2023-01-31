@@ -246,31 +246,31 @@ function createTextResult(data,seeMoreBtn){
 
 function createFeedback(data,overlay){
     let feedbackBtn = createButton(
-        "Feedback",
-        `
-          position: absolute;
+        "Report <br/> Hate!",
+        ` position: fixed;
           top: 50%;
-          right: -50px;
-          transform: rotate(270deg);
-          padding: 10px 20px;
-          background-color: #4CAF50;
-          color: white;
+          right: 0;
+          background-color: hwb(42deg 12% 0%);
+          color: #ae2323;
           border: none;
           cursor: pointer;
-          // make the button rounder at one length ans straigth on the other
-          border-top-left-radius: 20px;
-          border-top-right-radius: 20px;
-          border-bottom-left-radius: 0px;
-          border-bottom-right-radius: 0px;
+          border-radius: 50%;
           writing-mode: vertical-rl;
-          width: 100px;
-          height: 50px;
+          width: auto;
+          height: 10vh;
           transform-origin: center;
-          padding: 10px 20px;
+          box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+          padding:0;
+          padding-left:1vw;
+          padding-right:1vw;
+          min-width:0;
+          min-height:0;
+          font-size:1.2vh;
+          font-weight:bold;
         `
     )
     
-    overlay.appendChild(feedbackBtn);
+    document.body.appendChild(feedbackBtn);
     // Add an event listener to the feedback button
     feedbackBtn.addEventListener("click", function () {
         // To check if the pop is open then don't open it again!
