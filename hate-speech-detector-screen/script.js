@@ -535,7 +535,7 @@ api.runModel(getDump(document),-2).then(()=>{
 }) */
 
 // USES TEST DATA:
-if (api.hate) {
+if (data.hate) {
   console.log(getDump(document));
 
   // Create the new HTML element
