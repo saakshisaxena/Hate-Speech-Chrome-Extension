@@ -1,5 +1,6 @@
 class Api{
     constructor(){
+      this.bias = 0
     }
     
 
