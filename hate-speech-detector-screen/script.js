@@ -248,8 +248,7 @@ function createTextResult(data,seeMoreBtn){
 
             reportBtn.addEventListener("click", function () {
             // Send the tuple of the string and "false" to the API endpoint
-            
-            api.report(data.results[i].original, false)
+              report(data.results[i].original, false)
             });
         }
         }
