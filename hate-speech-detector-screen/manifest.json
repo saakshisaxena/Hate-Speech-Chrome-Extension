@@ -6,24 +6,26 @@
   "permissions": [
     "activeTab",
     "scripting",
+    "storage",
     "webNavigation", 
     "tabs",
     "webRequest"
   ],
+  "options_page": "options.html",
   "host_permissions":[
     "<all_urls>"
   ],
   "action": {
     "default_icon": {
-      "16": "whiteyeexample.png",
-      "32": "whiteyeexample.png"
+      "16": "whiteyeexampleICON.png",
+      "32": "whiteyeexampleICON.png"
       }
   },
   "icons": {
-    "16": "whiteyeexample.png",
-    "32": "whiteyeexample.png",
-    "48": "whiteyeexample.png",
-    "128": "whiteyeexample.png"
+    "16": "whiteyeexampleICON.png",
+    "32": "whiteyeexampleICON.png",
+    "48": "whiteyeexampleICON.png",
+    "128": "whiteyeexampleICON.png"
   },
   "background": {
     "service_worker": "background.js",
