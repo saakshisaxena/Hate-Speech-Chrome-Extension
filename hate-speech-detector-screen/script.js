@@ -30,16 +30,17 @@ class Api{
     }
     
 
-    report(statement,hate){
+    async report(statement,hate){
         console.log(statement,hate)
-        fetch("http://localhost:5000/", {
+        await fetch("http://localhost:5000/report", {
                 method: "POST",
                 headers: {
-                "Content-Type": "application/json",
+                  'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+                  'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
                 },
                 body: JSON.stringify({
-                originalText: statement,
-                hate: hate,
+                "originalText": statement,
+                "hate": hate,
                 }),
         })
         .then((response) => response.json())
@@ -426,7 +427,7 @@ function createFeedback(data,overlay){
 }
 
 // INTEGRATED WITH SERVER:
-/* let api= new Api()
+let api= new Api()
 api.runModel(getDump(document),-2).then(()=>{
 
   if (api.hate) {
@@ -532,10 +533,10 @@ api.runModel(getDump(document),-2).then(()=>{
   } else {
     console.log("No hate speech detected!");
   }
-}) */
+}) 
 
 // USES TEST DATA:
-if (data.hate) {
+/* if (data.hate) {
   console.log(getDump(document));
 
   // Create the new HTML element
@@ -639,3 +640,4 @@ if (data.hate) {
   console.log("No hate speech detected!");
 }
 
+ */
