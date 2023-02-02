@@ -511,13 +511,13 @@ runModel(getDump(document),-2).then((res)=>{
       document.body.appendChild(button);
 
       // Create a new div element to display the text result
-      textResult = createTextResult(data,seeMoreBtn)
+      textResult = createTextResult(res,seeMoreBtn)
 
       // Append the textResult div to the overlay
       overlay.appendChild(textResult);
 
       // Create the "Feedback" button
-      createFeedback(data)
+      createFeedback(res)
     }
 
   } else {
