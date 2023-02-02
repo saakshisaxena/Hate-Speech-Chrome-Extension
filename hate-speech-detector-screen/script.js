@@ -1,12 +1,38 @@
 class Api{
     constructor(){
       this.bias = 0
+      this.hate= true
+      this.data= []
+    }
+
+    async runModel(text,bias){
+      await fetch("http://localhost:5000/model", {
+                method: "POST",
+                headers: {
+                
+                'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+                },
+                body: JSON.stringify({
+                "data": text,
+                "bias": bias
+                }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log("Success:",data);
+            this.data = data.results
+            this.hate = data.hate
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
     }
     
 
     report(statement,hate){
         console.log(statement,hate)
-        fetch("https://your-api-endpoint.com/api/report", {
+        fetch("http://localhost:5000/", {
                 method: "POST",
                 headers: {
                 "Content-Type": "application/json",
@@ -399,9 +425,117 @@ function createFeedback(data,overlay){
     });
 }
 
+// INTEGRATED WITH SERVER:
+/* let api= new Api()
+api.runModel(getDump(document),-2).then(()=>{
 
+  if (api.hate) {
+    console.log(getDump(document));
 
-if (data.hate) {
+    // Create the new HTML element
+    let overlay = document.createElement("div");
+
+    // Set the CSS for the element
+    overlay.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: black;
+          z-index: 9999;
+      `;
+
+    // Add the element to the body of the current webpage
+    document.body.appendChild(overlay);
+
+    // Create the "Go Back" button
+    let goBackBtn = createButton(
+      "Go Back",
+      `position: absolute; bottom: 10%; left: 10%; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;`
+    );
+
+    // Create the "Proceed" button
+    let proceedBtn = createButton(
+      "Proceed",
+      `position: absolute;
+      bottom: 10%;
+      right: 10%;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;`
+    );
+
+    // Create the "See More" button
+    let seeMoreBtn = createButton(
+      "See More",
+      `position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translate(-50%, 0);
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;`
+      )
+
+    // Append the buttons to the overlay
+    overlay.appendChild(goBackBtn);
+    overlay.appendChild(proceedBtn);
+    overlay.appendChild(seeMoreBtn);
+
+    // Add the "Go Back" functionality to the "Go Back" button
+    goBackBtn.onclick = function () {
+      window.history.back();
+      overlay.remove();
+    };
+
+    // Add the "Proceed" functionality to the "Proceed" button
+    proceedBtn.onclick = function () {
+      overlay.remove();
+    };
+
+    // Create a new div element
+    let headingContainer = createHeading()
+
+    // Append the div to the overlay
+    overlay.appendChild(headingContainer);
+
+    // // Create the button element
+    let button = createButton("Show Original",``);
+    
+
+    // Add an event listener to the button that will display the "original" field when clicked
+    button.addEventListener("click", function () {
+      for (let i = 0; i < data.results.length; i++) {
+        if (data.results[i].hate) {
+          console.log(data.results[i].original);
+        }
+      }
+    });
+
+    // Add the button to the page
+    document.body.appendChild(button);
+
+    // Create a new div element to display the text result
+    textResult = createTextResult(data,seeMoreBtn)
+
+    // Append the textResult div to the overlay
+    overlay.appendChild(textResult);
+
+    // Create the "Feedback" button
+    createFeedback(data, overlay)
+
+  } else {
+    console.log("No hate speech detected!");
+  }
+}) */
+
+// USES TEST DATA:
+if (api.hate) {
   console.log(getDump(document));
 
   // Create the new HTML element
@@ -504,3 +638,4 @@ if (data.hate) {
 } else {
   console.log("No hate speech detected!");
 }
+
