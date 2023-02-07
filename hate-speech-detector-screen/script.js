@@ -283,6 +283,7 @@ function createFeedback(data){
           z-index: 100000;
         `
     )
+    feedbackBtn.id = "feedback-btn"
     
     document.body.appendChild(feedbackBtn);
     // Add an event listener to the feedback button
@@ -500,9 +501,9 @@ runModel(getDump(document),-2).then((res)=>{
 
       // Add an event listener to the button that will display the "original" field when clicked
       button.addEventListener("click", function () {
-        for (let i = 0; i < data.results.length; i++) {
-          if (data.results[i].hate) {
-            console.log(data.results[i].original);
+        for (let i = 0; i < res.results.length; i++) {
+          if (res.results[i].hate) {
+            console.log(res.results[i].original);
           }
         }
       });
@@ -521,10 +522,13 @@ runModel(getDump(document),-2).then((res)=>{
     }
 
   } else {
-    console.log("No hate speech detected!");
-    console.log(res)
-    // Create the "Feedback" button
-    createFeedback(data)
+    if ((document.getElementById("feedback-btn")) === null){
+      console.log("No hate speech detected!");
+      console.log(res)
+      // Create the "Feedback" button
+
+      createFeedback(res)
+    }
   }
 })
 
