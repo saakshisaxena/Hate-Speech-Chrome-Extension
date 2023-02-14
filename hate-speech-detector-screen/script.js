@@ -72,6 +72,13 @@ var data = {
 };
 
 async function runModel(text,bias){
+  if(bias == null){
+    let data = await chrome.storage.sync.get("sensitivity")
+    let val = data.sensitivity
+    var bias = parseInt(val)
+  }
+  let parentalControlVal = await chrome.storage.sync.get("parentalControl")
+  parentalControl = (parentalControlVal.parentalControl === 'true')
   let response = await fetch("http://localhost:5000/model", {
             method: "POST",
             headers: {
@@ -413,8 +420,9 @@ function createFeedback(data){
 
 // INTEGRATED WITH SERVER:
 
+var parentalControl; 
 
-runModel(getDump(document),-2).then((res)=>{
+runModel(getDump(document),null).then((res)=>{
   if (res.hate) {
     console.log(res)
     //console.log(getDump(document));
@@ -474,7 +482,10 @@ runModel(getDump(document),-2).then((res)=>{
 
       // Append the buttons to the overlay
       overlay.appendChild(goBackBtn);
-      overlay.appendChild(proceedBtn);
+      console.log(parentalControl)
+      if(!parentalControl){
+        overlay.appendChild(proceedBtn);
+      }
       overlay.appendChild(seeMoreBtn);
 
       // Add the "Go Back" functionality to the "Go Back" button
