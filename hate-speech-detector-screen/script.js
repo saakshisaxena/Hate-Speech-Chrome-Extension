@@ -256,6 +256,9 @@ function createTextResult(data,seeMoreBtn){
             reportBtn.addEventListener("click", function () {
             // Send the tuple of the string and "false" to the API endpoint
               report(data.results[i].original, false)
+              reportBtn.disabled = true;
+              reportBtn.innerHTML = "REPORTED!!";
+              reportBtn.style.cssText = `background-color: grey;`;
             });
         }
         }
@@ -343,9 +346,11 @@ function createFeedback(data){
             
             if (data.results[i].hate) {
                 toggleBtn.innerHTML = "Hate";
+                toggleBtn.style.backgroundColor = "red";
             } 
             else {
                 toggleBtn.innerHTML = "Not Hate";
+                toggleBtn.style.backgroundColor = "green";
             }
 
             toggleBtn.classList.add("toggle-btn");
@@ -360,8 +365,13 @@ function createFeedback(data){
                 // Check if the "hate" value of the sentence has been changed
                 let statement = this.previousSibling.innerHTML;
                 let hateValue = this.dataset.hate;
+                console.log(hateValue)
                 let feedbackData = { statement: statement, hate: hateValue };
-                
+                if (hateValue=="true"){
+                  toggleBtn.style.backgroundColor = "red";
+                }else {
+                  toggleBtn.style.backgroundColor = "green";
+              }
                 let existingDataIndex = feedbackDataArray.findIndex(
                     (data) => data.statement === statement
                 );
@@ -384,7 +394,7 @@ function createFeedback(data){
             for (let x = 0; x < feedbackDataArray.length; x++){
                 report(feedbackDataArray[x].statement,feedbackDataArray[x].hate)
             }
-            
+            document.body.removeChild(feedbackPopup);
         });
 
         // Add styling to the submit button 
