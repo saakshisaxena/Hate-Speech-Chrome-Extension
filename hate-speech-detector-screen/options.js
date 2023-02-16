@@ -16,7 +16,7 @@ function save_options() {
   function restore_options() {
     chrome.storage.sync.get({
       parentalControl: true,
-      sensitivity: 0.5,
+      sensitivity: -2,
     }, function(items) {
       document.getElementById('Parental Control').value = items.parentalControl;
       document.getElementById('Bias').value = items.sensitivity;
