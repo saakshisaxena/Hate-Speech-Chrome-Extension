@@ -193,79 +193,81 @@ function createHeading(){
 }
 
 function createTextResult(data,seeMoreBtn){
-    let textResult = document.createElement("div");
-      textResult.style.cssText = `
-              position: absolute;
-              top: 20%;
-              left: 50%;
-              transform: translate(-50%, 0);
-              color: white;
-              font-size: 1.2em;
-              text-align: center;
-              display: flex;
-              flex-wrap: wrap;
-          `;
-    // Add an event listener to the "See More" button that will update the textResult div when clicked
-    seeMoreBtn.addEventListener("click", function () {
-        // To check if the text is already there
-        if (document.getElementById("see-more-text")!=null) {
-          console.log("See more button already clicked!");
-          return;
-        }
-        textResult.setAttribute("id","see-more-text");
-        for (let i = 0; i < data.results.length; i++) {
+  let textResult = document.createElement("div");
+  textResult.style.cssText = `
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    color: white;
+    font-size: 1.2em;
+    text-align: center;
+    display: none;
+    flex-wrap: wrap;
+    max-height: 400px;
+    overflow-y: scroll;
+  `;
+  seeMoreBtn.addEventListener("click", function () {
+    if (textResult.style.display === "none") {
+      // If textResult is hidden, show it and populate with data
+      for (let i = 0; i < data.results.length; i++) {
         if (data.results[i].hate) {
-            // Create a new span element to display the text of the line
-            let lineText = document.createElement("span");
-            lineText.innerHTML = data.results[i].original + "\t";
+          // Create a new span element to display the text of the line
+          let lineText = document.createElement("span");
+          lineText.innerHTML = data.results[i].original + "\t";
 
-            // Create a new button element
-            let reportBtn = createButton(
-                "Report",
-                `
-                background-color: red;
-                color: white;
-                padding: 4px 8px;
-                border: none;
-                cursor: pointer;
-                `
-            )
-            reportBtn.innerHTML = "Report";
-            reportBtn.style.cssText = `
-                    flex-basis: 30%;
-                    background-color: red;
-                    color: white;
-                    width: 50px;
-                    height: 25px;
-                    padding: 4px 8px;
-                    border: none;
-                    cursor: pointer;
-                    line-height: 1.5;
-                `;
-            lineText.style.cssText = `
-                    flex-basis: 70%;
-                    margin-bottom: 20px;
-                `;
+          // Create a new button element
+          let reportBtn = createButton(
+            "Report",
+            `
+              background-color: red;
+              color: white;
+              padding: 4px 8px;
+              border: none;
+              cursor: pointer;
+            `
+          )
+          reportBtn.innerHTML = "Report";
+          reportBtn.style.cssText = `
+            flex-basis: 30%;
+            background-color: red;
+            color: white;
+            width: 50px;
+            height: 25px;
+            padding: 4px 8px;
+            border: none;
+            cursor: pointer;
+            line-height: 1.5;
+          `;
+          lineText.style.cssText = `
+            flex-basis: 70%;
+            margin-bottom: 20px;
+          `;
 
-            // Append the button and the span element to the textResult div
-            textResult.appendChild(lineText);
-            textResult.appendChild(reportBtn);
-            textResult.appendChild(document.createElement("br"));
-            textResult.appendChild(document.createElement("br"));
+          // Append the button and the span element to the textResult div
+          textResult.appendChild(lineText);
+          textResult.appendChild(reportBtn);
+          textResult.appendChild(document.createElement("br"));
+          textResult.appendChild(document.createElement("br"));
 
-            reportBtn.addEventListener("click", function () {
+          reportBtn.addEventListener("click", function () {
             // Send the tuple of the string and "false" to the API endpoint
-              report(data.results[i].original, false)
-              reportBtn.disabled = true;
-              reportBtn.innerHTML = "REPORTED!!";
-              reportBtn.style.cssText = `background-color: grey;`;
-            });
+            report(data.results[i].original, false)
+            reportBtn.disabled = true;
+            reportBtn.innerHTML = "REPORTED!!";
+            reportBtn.style.cssText = `background-color: grey;`;
+          });
         }
-        }
-    });
-    return textResult
-
+      }
+      textResult.style.display = "block";
+    } else {
+      // If textResult is shown, hide it
+      textResult.style.display = "none";
+    }
+  });
+  return textResult;
 }
+
 
 function createFeedback(data){
     let feedbackBtn = createButton(
