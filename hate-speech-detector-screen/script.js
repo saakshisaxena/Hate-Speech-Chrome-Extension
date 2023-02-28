@@ -193,8 +193,10 @@ function createHeading(){
 }
 
 function createTextResult(data,seeMoreBtn){
+
   let textResult = document.createElement("div");
   textResult.style.cssText = `
+    padding: 10px, 10px, 10px, 10px;
     position: absolute;
     top: 20%;
     left: 50%;
@@ -207,11 +209,15 @@ function createTextResult(data,seeMoreBtn){
     max-height: 400px;
     overflow-y: auto;
   `;
+
+
   seeMoreBtn.addEventListener("click", function () {
     
     if (document.getElementById("lineText") == null){
       for (let i = 0; i < data.results.length; i++) {
         if (data.results[i].hate) {
+          let resultBar = document.createElement("div");
+          resultBar.setAttribute("id","resultBar");
           // Create a new span element to display the text of the line
           let lineText = document.createElement("span");
           lineText.setAttribute("id","lineText");
@@ -228,8 +234,11 @@ function createTextResult(data,seeMoreBtn){
               cursor: pointer;
             `
           )
+
           reportBtn.innerHTML = "Report";
           reportBtn.style.cssText = `
+            position: relative;
+            right:    0;
             flex-basis: 30%;
             background-color: red;
             color: white;
@@ -244,11 +253,23 @@ function createTextResult(data,seeMoreBtn){
             flex-basis: 70%;
             margin-bottom: 20px;
           `;
+          resultBar.style.cssText = `
+            border-radius: 15px;
+            border: 2px solid #73AD21;
+            background-color: white;
+            padding: 10px, 10px, 10px, 10px;
+            color: black;
+            font-size: 1.2em;
+            text-align: center;
+            flex-wrap: wrap;
+            max-height: 400px;
+            overflow-y: auto;
+          `;
 
           // Append the button and the span element to the textResult div
-          textResult.appendChild(lineText);
-          textResult.appendChild(reportBtn);
-          textResult.appendChild(document.createElement("br"));
+          resultBar.appendChild(lineText);
+          resultBar.appendChild(reportBtn);
+          textResult.appendChild(resultBar);
           textResult.appendChild(document.createElement("br"));
 
           reportBtn.addEventListener("click", function () {
@@ -312,6 +333,7 @@ function createFeedback(data){
           console.log("Popup is open");
           return;
         }
+        textResult.style.visibility = "hidden";
         // Create the new HTML element for the pop-up
         let feedbackPopup = document.createElement("div");
     
@@ -425,7 +447,7 @@ function createFeedback(data){
             position: absolute;
             right:    0;
             top:   0;
-            padding: 20px 20px 20px 20px;
+            padding: 5px 5px 5px 5px;
             background-color: red ;
             color: white;
             border: none;
