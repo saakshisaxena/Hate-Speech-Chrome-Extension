@@ -205,15 +205,16 @@ function createTextResult(data,seeMoreBtn){
     display: none;
     flex-wrap: wrap;
     max-height: 400px;
-    overflow-y: scroll;
+    overflow-y: auto;
   `;
   seeMoreBtn.addEventListener("click", function () {
-    if (textResult.style.display === "none") {
-      // If textResult is hidden, show it and populate with data
+    
+    if (document.getElementById("lineText") == null){
       for (let i = 0; i < data.results.length; i++) {
         if (data.results[i].hate) {
           // Create a new span element to display the text of the line
           let lineText = document.createElement("span");
+          lineText.setAttribute("id","lineText");
           lineText.innerHTML = data.results[i].original + "\t";
 
           // Create a new button element
@@ -232,8 +233,8 @@ function createTextResult(data,seeMoreBtn){
             flex-basis: 30%;
             background-color: red;
             color: white;
-            width: 50px;
-            height: 25px;
+            width: fit-content;;
+            height: fit-content;
             padding: 4px 8px;
             border: none;
             cursor: pointer;
@@ -260,9 +261,15 @@ function createTextResult(data,seeMoreBtn){
         }
       }
       textResult.style.display = "block";
+    }
+
+
+    if (textResult.style.visibility === "hidden") {
+      // If textResult is hidden, show it and populate with data
+      textResult.style.visibility = "visible"
     } else {
       // If textResult is shown, hide it
-      textResult.style.display = "none";
+      textResult.style.visibility = "hidden";
     }
   });
   return textResult;
@@ -333,7 +340,7 @@ function createFeedback(data){
         feedbackList.classList.add("feedback-list");
         feedbackPopup.appendChild(feedbackList);
         feedbackList.style.height = "300px";
-        feedbackList.style.overflowY = "scroll";
+        feedbackList.style.overflowY = "auto";
     
         // To keep a track of changes of the toggle button
         let feedbackDataArray = [];
@@ -416,9 +423,9 @@ function createFeedback(data){
         closeBtn.innerHTML = "Close";
         closeBtn.style.cssText = `
             position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 10px 20px;
+            right:    0;
+            bottom:   0;
+            padding: 20px 20px 20px 20px;
             background-color: #4CAF50;
             color: white;
             border: none;
