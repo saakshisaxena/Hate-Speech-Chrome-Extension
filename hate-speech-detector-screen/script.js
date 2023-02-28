@@ -264,7 +264,7 @@ function createTextResult(data,seeMoreBtn){
     }
 
 
-    if (textResult.style.visibility === "hidden") {
+    if (textResult.style.visibility != "visible") {
       // If textResult is hidden, show it and populate with data
       textResult.style.visibility = "visible"
     } else {
@@ -420,16 +420,18 @@ function createFeedback(data){
     
         // Create a close button
         let closeBtn = document.createElement("button");
-        closeBtn.innerHTML = "Close";
+        closeBtn.innerHTML = "x";
         closeBtn.style.cssText = `
             position: absolute;
             right:    0;
-            bottom:   0;
+            top:   0;
             padding: 20px 20px 20px 20px;
-            background-color: #4CAF50;
+            background-color: red ;
             color: white;
             border: none;
             cursor: pointer;
+            height: fit-content;
+            width: fit-content
         `;
         feedbackPopup.appendChild(closeBtn);
         closeBtn.addEventListener("click", function () {
