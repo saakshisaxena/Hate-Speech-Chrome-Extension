@@ -208,10 +208,24 @@ function createTextResult(data,seeMoreBtn){
     flex-wrap: wrap;
     max-height: 400px;
     overflow-y: auto;
+    background-color:white;
+    padding:5vh;
+    padding-top: 2vh;
   `;
-
-
+  let headSeeMore= document.createElement("h1");
+  headSeeMore.innerHTML = "Hate Speech Detected...";
+  headSeeMore.style.cssText=`
+  font-size: 4vh;
+  font-weight:600;
+  color:black;
+  `
+  textResult.appendChild(headSeeMore)
   seeMoreBtn.addEventListener("click", function () {
+
+    if (document.getElementById("popup")!=null) {
+      console.log(document.getElementById('popup'))
+      document.getElementById('popup').remove(); 
+    }
     
     if (document.getElementById("lineText") == null){
       for (let i = 0; i < data.results.length; i++) {
@@ -237,47 +251,56 @@ function createTextResult(data,seeMoreBtn){
 
           reportBtn.innerHTML = "Report";
           reportBtn.style.cssText = `
-            position: relative;
-            right:    0;
-            flex-basis: 30%;
-            background-color: red;
-            color: white;
-            width: fit-content;;
-            height: fit-content;
-            padding: 4px 8px;
-            border: none;
-            cursor: pointer;
-            line-height: 1.5;
+            
+           
+          background-color: red;
+          color: white;
+          padding: 1vh;
+          border: none;
+          border-radius: 2vh;
+          box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
           `;
           lineText.style.cssText = `
             flex-basis: 70%;
             margin-bottom: 20px;
+            margin-left: 15px;
+            margin-right: 15px;
+            margin-top: 15px;
+            float: left;
           `;
           resultBar.style.cssText = `
-            border-radius: 15px;
-            border: 2px solid #73AD21;
-            background-color: white;
-            padding: 10px, 10px, 10px, 10px;
-            color: black;
-            font-size: 1.2em;
-            text-align: center;
-            flex-wrap: wrap;
-            max-height: 400px;
-            overflow-y: auto;
+          background-color: rgba(241, 241, 241, 0.75);
+          color: black;
+          font-size: 1.2em;
+          text-align: center;
+          max-height: 400px;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1vh;
+          margin-bottom: 1vh;
+          border-radius: 1vh;
           `;
 
           // Append the button and the span element to the textResult div
           resultBar.appendChild(lineText);
           resultBar.appendChild(reportBtn);
           textResult.appendChild(resultBar);
-          textResult.appendChild(document.createElement("br"));
+          
 
           reportBtn.addEventListener("click", function () {
             // Send the tuple of the string and "false" to the API endpoint
             report(data.results[i].original, false)
             reportBtn.disabled = true;
             reportBtn.innerHTML = "REPORTED!!";
-            reportBtn.style.cssText = `background-color: grey;`;
+            reportBtn.style.cssText = `
+            color: white;
+            background-color: grey;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 15px`
           });
         }
       }
@@ -329,10 +352,13 @@ function createFeedback(data){
     // Add an event listener to the feedback button
     feedbackBtn.addEventListener("click", function () {
         // To check if the pop is open then don't open it again!
+        console.log(document.getElementById("popup")!=null)
         if (document.getElementById("popup")!=null) {
-          console.log("Popup is open");
-          return;
+          console.log(document.getElementById('popup'))
+          document.getElementById('popup').remove();
+          
         }
+        else{
         textResult.style.visibility = "hidden";
         // Create the new HTML element for the pop-up
         let feedbackPopup = document.createElement("div");
@@ -350,12 +376,24 @@ function createFeedback(data){
     
         // Add the content for the pop-up
         feedbackPopup.innerHTML = `
-            <h1>Feedback</h1>
+          <div id='feedback-head'>
+            <h1 style='font-size:5vh'>Feedback</h1>
             <button id="submit-feedback-btn">Submit</button>
+          </div>
         `;
+        
+
         feedbackPopup.setAttribute("id","popup");
         // Add the element to the body of the current webpage
         document.body.appendChild(feedbackPopup);
+
+        document.getElementById('feedback-head').style.cssText = `
+            flex-direction: row;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5vh;
+          `;
     
         // Create a container element for the original sentences and toggle buttons
         let feedbackList = document.createElement("div");
@@ -368,10 +406,26 @@ function createFeedback(data){
         let feedbackDataArray = [];
         // Add the data from hate speech model to the pop up
         for (let i = 0; i < data.results.length; i++) {
+            let group = document.createElement('div');
+            group.style.cssText = `
+            background-color: #f1f1f1bf;
+            color: black;
+            font-size: 1.2em;
+            text-align: center;
+            max-height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items:center;
+            padding: 1vh;
+            margin-bottom: 1vh;
+            border-radius: 1vh;
+            `
             let sentence = document.createElement("p");
             sentence.innerHTML = `${i + 1}. ${data.results[i].original}`;
             sentence.classList.add("sentence");
-            feedbackList.appendChild(sentence);
+            group.appendChild(sentence);
     
             let toggleBtn = document.createElement("button");
             
@@ -401,7 +455,7 @@ function createFeedback(data){
                 if (hateValue=="true"){
                   toggleBtn.style.backgroundColor = "red";
                 }else {
-                  toggleBtn.style.backgroundColor = "green";
+                  toggleBtn.style.backgroundColor = "rgb(76, 175, 80)";
               }
                 let existingDataIndex = feedbackDataArray.findIndex(
                     (data) => data.statement === statement
@@ -414,8 +468,17 @@ function createFeedback(data){
                     feedbackDataArray.push(feedbackData);
                 }
             };
-    
-            feedbackList.appendChild(toggleBtn);
+            toggleBtn.style.cssText = `
+            background-color: red;
+            border-radius: 1vh;
+            border: unset;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            min-width: 20%;
+            height: 100%;
+            padding: 1vh;
+            `
+            group.appendChild(toggleBtn);
+            feedbackList.appendChild(group);
         }
     
         // Add submit button listener
@@ -429,15 +492,14 @@ function createFeedback(data){
         });
 
         // Add styling to the submit button 
-        submitBtn.style.backgroundColor = "blue";
-        submitBtn.style.color = "white";
-        submitBtn.style.padding = "10px 20px";
-        submitBtn.style.borderRadius = "5px";
-        submitBtn.style.margin = "5%";
-        submitBtn.style.width = "100px";
-        submitBtn.style.position = "absolute";
-        submitBtn.style.right = "35%";
-        submitBtn.style.top = "0";
+        submitBtn.style.cssText = `
+        background-color: #4caf50;
+        border: unset;
+        padding: 2vh;
+        border-radius: 2vh;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        `
+      
         
     
         // Create a close button
@@ -459,6 +521,7 @@ function createFeedback(data){
         closeBtn.addEventListener("click", function () {
             document.body.removeChild(feedbackPopup);
         });
+      }
     });
 }
 
