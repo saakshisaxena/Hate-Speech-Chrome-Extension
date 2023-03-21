@@ -347,8 +347,9 @@ function createFeedback(data){
         `
     )
     feedbackBtn.id = "feedback-btn"
-    
-    document.body.appendChild(feedbackBtn);
+    if(!parentalControl){
+      document.body.appendChild(feedbackBtn);
+    }
     // Add an event listener to the feedback button
     feedbackBtn.addEventListener("click", function () {
         // To check if the pop is open then don't open it again!
@@ -592,8 +593,9 @@ runModel(getDump(document),null).then((res)=>{
       console.log(parentalControl)
       if(!parentalControl){
         overlay.appendChild(proceedBtn);
+        overlay.appendChild(seeMoreBtn);
       }
-      overlay.appendChild(seeMoreBtn);
+      
 
       // Add the "Go Back" functionality to the "Go Back" button
       goBackBtn.onclick = function () {
