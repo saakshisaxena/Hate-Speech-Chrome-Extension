@@ -526,11 +526,45 @@ function createFeedback(data){
     });
 }
 
+/*****************************************************************************************
+ *****************************************************************************************/
+
 // INTEGRATED WITH SERVER:
 
 var parentalControl; 
 
+// Adding the loading screen
+// Add the loading screen if it doesn't exist
+if (!document.getElementById("loading-screen")) {
+
+  let loadingScreen = document.createElement("div");
+  loadingScreen.id="loading-screen"
+  loadingScreen.innerHTML = '<div class="spinner"></div>';
+
+  // Set the CSS for the element
+  loadingScreen.style.cssText = `
+      position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+    `;
+
+  // Add the element to the body of the current webpage
+  document.body.appendChild(loadingScreen);
+  console.log("loading screen added");
+}
+
 runModel(getDump(document),null).then((res)=>{
+  console.log("inside");
+  // Remove the loading screen
+  let loadingScreen = document.getElementById("loading-screen");
+  console.log(loadingScreen);
+  loadingScreen.remove();
+  console.log("loading screen removed");
+
   if (res.hate) {
     console.log(res)
     //console.log(getDump(document));
