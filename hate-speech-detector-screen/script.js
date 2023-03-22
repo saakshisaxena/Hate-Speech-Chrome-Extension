@@ -552,13 +552,45 @@ if (!document.getElementById("loading-screen")) {
         z-index: 9999;
     `;
 
+  // Create the spinner element
+  var spinner = document.createElement("div");
+  spinner.id = "spinner";
+  spinner.style.cssText = `
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spinner 0.8s ease-in-out infinite;
+    margin: auto;
+  `;
+
+  // Append the spinner element to the loading screen element
+  loadingScreen.appendChild(spinner);
+
+  // Define the spinner animation
+  var spinnerAnimation = `
+  @keyframes spinner {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  `;
+  // Create a style element and add the spinner animation to it
+  var spinnerStyles = document.createElement("style");
+  spinnerStyles.innerHTML = spinnerAnimation;
+
+  // Add the style element to the head of the document
+  document.head.appendChild(spinnerStyles);
+
+
+
   // Add the element to the body of the current webpage
   document.body.appendChild(loadingScreen);
   console.log("loading screen added");
 }
 
 runModel(getDump(document),null).then((res)=>{
-  console.log("inside");
   // Remove the loading screen
   let loadingScreen = document.getElementById("loading-screen");
   console.log(loadingScreen);
@@ -570,7 +602,6 @@ runModel(getDump(document),null).then((res)=>{
     //console.log(getDump(document));
 
     // Create the new HTML element
-    
     if ((document.getElementById("overlay")) === null){//prevents duplicate overlays
       let overlay = document.createElement("div");
       overlay.id="overlay"
