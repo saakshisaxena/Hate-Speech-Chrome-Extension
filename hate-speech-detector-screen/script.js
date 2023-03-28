@@ -429,6 +429,14 @@ function createFeedback(data){
             group.appendChild(sentence);
     
             let toggleBtn = document.createElement("button");
+            toggleBtn.style.cssText = `
+            border-radius: 1vh;
+            border: unset;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            min-width: 20%;
+            height: 100%;
+            padding: 1vh;
+            `
             
             if (data.results[i].hate) {
                 toggleBtn.innerHTML = "Hate";
@@ -436,7 +444,7 @@ function createFeedback(data){
             } 
             else {
                 toggleBtn.innerHTML = "Not Hate";
-                toggleBtn.style.backgroundColor = "green";
+                toggleBtn.style.backgroundColor = "rgb(76, 175, 80)";
             }
 
             toggleBtn.classList.add("toggle-btn");
@@ -469,15 +477,7 @@ function createFeedback(data){
                     feedbackDataArray.push(feedbackData);
                 }
             };
-            toggleBtn.style.cssText = `
-            background-color: red;
-            border-radius: 1vh;
-            border: unset;
-            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-            min-width: 20%;
-            height: 100%;
-            padding: 1vh;
-            `
+            
             group.appendChild(toggleBtn);
             feedbackList.appendChild(group);
         }
