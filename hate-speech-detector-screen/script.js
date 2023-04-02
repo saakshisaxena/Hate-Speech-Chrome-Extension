@@ -75,7 +75,7 @@ async function runModel(text,bias){
   if(bias == null){
     let data = await chrome.storage.sync.get("sensitivity")
     let val = data.sensitivity
-    var bias = parseInt(val)
+    var bias = val
   }
   let parentalControlVal = await chrome.storage.sync.get("parentalControl")
   parentalControl = (parentalControlVal.parentalControl === 'true')
