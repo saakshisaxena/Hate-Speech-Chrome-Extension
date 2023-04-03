@@ -212,6 +212,7 @@ function createTextResult(data,seeMoreBtn){
     padding:5vh;
     padding-top: 2vh;
   `;
+  textResult.id = "textResult"
   let headSeeMore= document.createElement("h1");
   headSeeMore.innerHTML = "Hate Speech Detected...";
   headSeeMore.style.cssText=`
@@ -360,7 +361,10 @@ function createFeedback(data){
           
         }
         else{
-        textResult.style.visibility = "hidden";
+        if (document.getElementById("textResult")!=null) {
+          textResult.style.visibility = "hidden";
+        }
+        
         // Create the new HTML element for the pop-up
         let feedbackPopup = document.createElement("div");
     
@@ -597,6 +601,9 @@ runModel(getDump(document),null).then((res)=>{
   loadingScreen.remove();
   console.log("loading screen removed");
 
+  // Create the "Feedback" button
+  createFeedback(res)
+
   if (res.hate) {
     console.log(res)
     //console.log(getDump(document));
@@ -701,8 +708,6 @@ runModel(getDump(document),null).then((res)=>{
       // Append the textResult div to the overlay
       overlay.appendChild(textResult);
 
-      // Create the "Feedback" button
-      createFeedback(res)
     }
 
   } else {
