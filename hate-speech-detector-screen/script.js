@@ -597,6 +597,9 @@ runModel(getDump(document),null).then((res)=>{
   loadingScreen.remove();
   console.log("loading screen removed");
 
+  // Create the "Feedback" button
+  createFeedback(res)
+
   if (res.hate) {
     console.log(res)
     //console.log(getDump(document));
@@ -701,8 +704,6 @@ runModel(getDump(document),null).then((res)=>{
       // Append the textResult div to the overlay
       overlay.appendChild(textResult);
 
-      // Create the "Feedback" button
-      createFeedback(res)
     }
 
   } else {
