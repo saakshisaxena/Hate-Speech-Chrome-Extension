@@ -133,6 +133,8 @@ function getDump(document) {
   content = content.replace(/(<([^>]+)>)/gi, " ");
   str = content;
   str = str.replace(/\s\s+/g, ". ");
+  str = str.replace(/Report\. Hate!/gi, "");
+  console.log(str);
   return str;
 }
 
@@ -728,9 +730,35 @@ runModel(getDump(document),null).then((res)=>{
     /*let loadingScreen = document.getElementById("loading-screen");*/
     /*console.log(loadingScreen);*/
     document.getElementById("loading-screen").style.display = 'none'
-    
     console.log("loading screen removed");
     
+    let warningBtn = createButton(
+        "Warning! <br/> Detector not working.",
+        ` position: fixed;
+          top: 50%;
+          right: 0;
+          background-color: hwb(42deg 12% 0%);
+          color: #ae2323;
+          border: none;
+          cursor: pointer;
+          border-radius: 50%;
+          writing-mode: vertical-rl;
+          width: auto;
+          height: 10vh;
+          transform-origin: center;
+          box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+          padding:0;
+          padding-left:1vw;
+          padding-right:1vw;
+          min-width:0;
+          min-height:0;
+          font-size:1.2vh;
+          font-weight:bold;
+          z-index: 100000;
+        `
+    )
+    document.body.appendChild(warningBtn);
+    console.log("warningBtn added!");
   }
   
   
