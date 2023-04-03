@@ -24,12 +24,15 @@
       <div class="mb-3">
         <label for="Bias" class="form label">Sensitivity</label>
         <input type="range" class="form-range" id="Bias" min=0 max=1 step=0.1>
-        <div id="biasHelp" class="form-text">This allows you to decide the sensitivity of the app towards hate speech </div>
+        <div class="card text-center">
+          <h3 class="card-title" id = sens-value></h3>
+        </div>
+        <div id="biasHelp" class="form-text">This allows you to decide the sensitivity of the app towards hate speech (range is 0 to 1) </div>
       </div>
       <div class="mb-3">
         <button type="button" class="btn btn-primary" id="save">Save</button>
       </div>
-      <div id="status"></div>
+      <div id="status" value=Bias.value></div>
     </div>
   </div>
 </div>
