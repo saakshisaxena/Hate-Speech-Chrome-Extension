@@ -20,11 +20,18 @@ function save_options() {
       parentalControl: false,
       sensitivity: 0,
     }, function(items) {
+      document.getElementById("sens-value").innerHTML = String(items.sensitivity);
       document.getElementById('Parental Control').value = items.parentalControl;
       document.getElementById('Bias').value = items.sensitivity;
     });
   }
+
+  function setSens() {
+    sensitivity = document.getElementById('Bias').value
+    document.getElementById("sens-value").innerHTML = String(sensitivity);
+  };
+
   document.addEventListener('DOMContentLoaded', restore_options);
   document.getElementById('save').addEventListener('click',
       save_options);
-
+  document.getElementById('Bias').onchange = function()  {setSens()};
