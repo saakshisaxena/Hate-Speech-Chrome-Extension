@@ -212,6 +212,7 @@ function createTextResult(data,seeMoreBtn){
     padding:5vh;
     padding-top: 2vh;
   `;
+  textResult.id = "textResult"
   let headSeeMore= document.createElement("h1");
   headSeeMore.innerHTML = "Hate Speech Detected...";
   headSeeMore.style.cssText=`
@@ -360,7 +361,10 @@ function createFeedback(data){
           
         }
         else{
-        textResult.style.visibility = "hidden";
+        if (document.getElementById("textResult")!=null) {
+          textResult.style.visibility = "hidden";
+        }
+        
         // Create the new HTML element for the pop-up
         let feedbackPopup = document.createElement("div");
     
