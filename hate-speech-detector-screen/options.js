@@ -1,11 +1,12 @@
 function save_options() {
     var parentalCon = document.getElementById('Parental Control').value;
     var bias = document.getElementById('Bias').value;
+    var sensvalue = (1 - bias).toFixed(1);
     console.log(parentalCon)
-    console.log(bias)
+    console.log(sensvalue)
     chrome.storage.sync.set({
       parentalControl: parentalCon,
-      sensitivity: bias
+      sensitivity: sensvalue
     }, function() {
       var status = document.getElementById('status');
       status.textContent = 'Options saved.';
@@ -18,11 +19,12 @@ function save_options() {
   function restore_options() {
     chrome.storage.sync.get({
       parentalControl: false,
-      sensitivity: 0,
+      sensitivity: 0.7,
     }, function(items) {
-      document.getElementById("sens-value").innerHTML = String(items.sensitivity);
+      sensvalue = (1 - items.sensitivity).toFixed(1);
+      document.getElementById("sens-value").innerHTML = String(sensvalue);
       document.getElementById('Parental Control').value = items.parentalControl;
-      document.getElementById('Bias').value = items.sensitivity;
+      document.getElementById('Bias').value = sensvalue;
     });
   }
 

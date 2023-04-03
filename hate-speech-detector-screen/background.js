@@ -30,11 +30,3 @@ chrome.action.onClicked.addListener((tab) => {
     }
     
   });  
-
-chrome.storage.sync.set({
-  parentalControl: false,
-  sensitivity: 0
-}).then(() => {
-  console.log("parentalControl is set to " + false);
-  console.log("sensitivity is set to " + 0);
-});
