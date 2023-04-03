@@ -10,7 +10,7 @@
             .catch(err => console.log(err));
 }); */
 chrome.tabs.onUpdated.addListener((tabId,changeInfo,tab) => {
-    
+  
   chrome.scripting.executeScript({
       target: { tabId: tabId },
       files: ["./script.js"]

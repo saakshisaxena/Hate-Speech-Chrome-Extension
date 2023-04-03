@@ -599,6 +599,7 @@ runModel(getDump(document),null).then((res)=>{
   let loadingScreen = document.getElementById("loading-screen");
   console.log(loadingScreen);
   loadingScreen.remove();
+  
   console.log("loading screen removed");
 
   // Create the "Feedback" button
@@ -719,6 +720,20 @@ runModel(getDump(document),null).then((res)=>{
       createFeedback(res)
     }
   }
+}).catch((err)=>{
+  console.log(err)
+  if (document.getElementById("loading-screen")){
+    /*window.alert("Hate speech detection could not be run!")*/
+    
+    /*let loadingScreen = document.getElementById("loading-screen");*/
+    /*console.log(loadingScreen);*/
+    document.getElementById("loading-screen").style.display = 'none'
+    
+    console.log("loading screen removed");
+    
+  }
+  
+  
 })
 
 // USES TEST DATA:
