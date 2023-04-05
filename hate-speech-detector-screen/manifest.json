@@ -9,7 +9,8 @@
     "storage",
     "webNavigation", 
     "tabs",
-    "webRequest"
+    "webRequest",
+    "nativeMessaging"
   ],
   "options_page": "options.html",
   "host_permissions":[

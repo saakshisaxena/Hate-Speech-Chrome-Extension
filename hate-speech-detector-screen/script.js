@@ -1,75 +1,4 @@
-var data = {
-  hate: true,
-  results: [
-    {
-      original: "i hate white people",
-      processed: ["hate", "people"],
-      hate: true,
-    },
-    {
-      original: "i hate people ahhhh",
-      processed: ["hate", "people"],
-      hate: true,
-    },
-    {
-      original: "we've updated our privacy and cookies policy",
-      processed: ["update", "privacy", "cookies", "policy"],
-      hate: false,
-    },
-    {
-      original:
-        "we've made some important changes to our privacy and cookies policy and we want you to know what this means for you and your data",
-      processed: [
-        "make",
-        "important",
-        "change",
-        "privacy",
-        "cookies",
-        "policy",
-        "want",
-        "know",
-        "mean",
-        "data",
-      ],
-      hate: false,
-    },
-    {
-      original: "ok",
-      processed: ["ok"],
-      hate: false,
-    },
-    {
-      original: "find out what's changed",
-      processed: ["find", "change"],
-      hate: true,
-    },
-    {
-      original: "let us know you agree to cookies",
-      processed: ["let", "us", "know", "agree", "cookies"],
-      hate: false,
-    },
-    {
-      original: "let us know you agree to cookies",
-      processed: ["let", "us", "know", "agree", "cookies"],
-      hate: false,
-    },
-    {
-      original: "we use",
-      processed: ["use"],
-      hate: false,
-    },
-    {
-      original: "cookies",
-      processed: ["cookies"],
-      hate: false,
-    },
-    {
-      original: "to give you the best online experience",
-      processed: ["give", "best", "online", "experience"],
-      hate: true,
-    },
-  ],
-};
+
 
 async function runModel(text,bias){
   if(bias == null){
@@ -78,7 +7,8 @@ async function runModel(text,bias){
     var bias = val
   }
   let parentalControlVal = await chrome.storage.sync.get("parentalControl")
-  parentalControl = (parentalControlVal.parentalControl === 'true')
+  parentalControl = parentalControlVal.parentalControl
+  console.log(parentalControl)
   let response = await fetch("http://localhost:5000/model", {
             method: "POST",
             headers: {
@@ -665,7 +595,7 @@ runModel(getDump(document),null).then((res)=>{
 
       // Append the buttons to the overlay
       overlay.appendChild(goBackBtn);
-      console.log(parentalControl)
+      
       if(!parentalControl){
         overlay.appendChild(proceedBtn);
         overlay.appendChild(seeMoreBtn);
