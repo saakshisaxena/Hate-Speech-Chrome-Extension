@@ -30,3 +30,13 @@ chrome.action.onClicked.addListener((tab) => {
     }
     
   });  
+
+chrome.runtime.onInstalled.addListener(details =>{
+  if(details.reason="install"){
+    chrome.storage.sync.set({
+      parentalControl: false,
+      sensitivity: 0.5
+    });
+    console.log()    
+  }
+});
