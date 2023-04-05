@@ -1,5 +1,5 @@
 function save_options() {
-    var parentalCon = document.getElementById('Parental Control').value;
+    var parentalCon = (document.getElementById('Parental Control').value === 'true');
     var bias = document.getElementById('Bias').value;
     var sensvalue = parseFloat((1 - bias).toFixed(1));
     console.log(parentalCon)
@@ -19,7 +19,7 @@ function save_options() {
   function restore_options() {
     chrome.storage.sync.get({
       parentalControl: false,
-      sensitivity: 0.5
+      sensitivity: 0.6
     }, function(items) {
       sensvalue = parseFloat((1 - items.sensitivity).toFixed(1));
       document.getElementById("sens-value").innerHTML = String(sensvalue);
